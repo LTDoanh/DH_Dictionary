@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class AppManager {
 
-  public static final String path = "resources/Dictionary.html";
+  public static final String path = "C:\\Users\\DELL\\IdeaProjects\\DH_Dictionary\\src\\main\\resources\\Dictionary.html";
   private static final Scanner scn = new Scanner(System.in);
 
   /**
@@ -49,8 +49,6 @@ public class AppManager {
       System.out.println("Can't find");
     }
   }
-
-
   public static void dictionaryAdd() {
     System.out.print("Type word target: ");
     String wordTarget = scn.nextLine();

@@ -20,7 +20,7 @@ import java.util.Objects;
 
 
 public class App extends Application {
-  private static final String FXML_PATH = "src/resources/App.fxml";
+  private static final String FXML_PATH = "C:\\Users\\DELL\\IdeaProjects\\DH_Dictionary\\src\\main\\resources\\App.fxml";
   @FXML
   private TextField textField;
   @FXML
@@ -36,7 +36,7 @@ public class App extends Application {
   public void start(Stage primaryStage) throws Exception {
     Scene scene = new Scene(new FXMLLoader().load(new FileInputStream(FXML_PATH)));
     primaryStage.setScene(scene);
-    primaryStage.setTitle("English - Vietnamese Dictionary");
+    primaryStage.setTitle("DH Dictionary");
     primaryStage.show();
     DatabaseConnection.readAllData();
     display(scene);
@@ -209,5 +209,4 @@ class AlertBox {
     window.setScene(scene);
     window.showAndWait();
   }
-
 }
