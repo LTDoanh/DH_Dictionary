@@ -1,4 +1,4 @@
-module com.example.demo2 {
+module dictionary {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
