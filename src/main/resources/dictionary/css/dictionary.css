@@ -1,0 +1,4 @@
+.root{
+-fx-background-image:url("/resources/media/image/logo.png");
+-fx-background-size:cover;
+}

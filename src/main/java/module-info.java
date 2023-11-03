@@ -1,11 +1,13 @@
-module com.example.dh_dictionary {
+module com.example.demo2 {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.graphics;
+    requires javafx.base;
+    requires javafx.media;
     requires java.sql;
+    requires org.jsoup;
+    requires voicerss.tts;
 
-
-    opens com.example.dh_dictionary to javafx.fxml;
-    exports com.example.dh_dictionary;
-  exports;
-  opens to
+    opens dictionary to javafx.fxml;
+    exports dictionary;
 }
