@@ -43,6 +43,9 @@ public class TranslateController implements Initializable {
   private TextField text2;
 
   @FXML
+  private Button speakButton;
+
+  @FXML
   private Button translateButton;
 
   @FXML
@@ -133,15 +136,10 @@ public class TranslateController implements Initializable {
 
   @FXML
   private void handlePlay() {
-    try {
-      System.out.println(area1.getText());
-      File file = new File(Voice.TextToVoice(Voice.TextToVoice(area1.getText())));
-      Media media = new Media(file.toURI().toString());
-      mediaPlayer = new MediaPlayer(media);
-      mediaPlayer.play();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    Voice.engTextToVoice(area1.getText());
+    Media media = new Media(new File(Voice.audioFilePath).toURI().toString());
+    mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.play();
   }
 
   @Override
@@ -163,6 +161,7 @@ public class TranslateController implements Initializable {
     area1.textProperty().addListener((observableValue, oldValue, newValue) -> {
       if (!newValue.isEmpty()) {
         translateButton.setDisable(false);
+        area2.clear();
       } else {
         translateButton.setDisable(true);
       }

@@ -43,9 +43,9 @@ public class DatabaseConnection {
       ResultSet rs = ps.executeQuery();
       // Duyệt qua các bản ghi trong ResultSet và thêm vào danh sách words
       while (rs.next()) {
-        // Lấy giá trị của các cột trong bản ghi hiện tại
-        int id = rs.getInt("id");
-        String target = rs.getString("target");
+        // Lấy giá trị của các "id");
+        String target = rs.getScột trong bản ghi hiện tại
+        int id = rs.getInt(tring("target");
         String definition = rs.getString("definition");
         // Tạo một đối tượng Word từ các giá trị này
         Word w = new Word(id, target, definition);
@@ -58,6 +58,8 @@ public class DatabaseConnection {
     // Trả về danh sách words
     return words;
   }
+
+
 
   // Phương thức để thêm dữ liệu từ điển vào file SQL
   public boolean insert(Word word) {

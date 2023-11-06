@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -119,14 +118,10 @@ public class DictionaryController implements Initializable {
 
   @FXML
   private void handlePlay() {
-    try {
-      File file = new File(Voice.TextToVoice(text));
-      Media media = new Media(file.toURI().toString());
-      mediaPlayer = new MediaPlayer(media);
-      mediaPlayer.play();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    Voice.engTextToVoice(text);
+    Media media = new Media(new File(Voice.audioFilePath).toURI().toString());
+    mediaPlayer = new MediaPlayer(media);
+    mediaPlayer.play();
   }
 
   // Phương thức để xử lý sự kiện khi nhấn Button thêm từ
