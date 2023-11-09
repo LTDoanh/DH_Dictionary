@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 
@@ -16,9 +17,11 @@ public class Main extends Application {
   @Override
   public void start(Stage stage) throws IOException {
     try {
-      Parent wordScene = FXMLLoader.load(this.getClass().getResource("fxml/dictionary.fxml"));
-      Scene translateWord = new Scene(wordScene);
+      Parent root = FXMLLoader.load(this.getClass().getResource("fxml/dictionary.fxml"));
+      Scene translateWord = new Scene(root);
       stage.setScene(translateWord);
+      stage.getIcons().add(new Image(getClass().getResource("media/image/logo.png").toExternalForm()));
+      stage.setTitle("DH Dictionary");
       stage.show();
 
       // Thiết lập sự kiện khi nhấn nút thoát

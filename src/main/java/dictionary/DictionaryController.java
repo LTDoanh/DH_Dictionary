@@ -18,6 +18,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -35,13 +36,13 @@ public class DictionaryController implements Initializable {
   @FXML
   private TextArea taMeaning;
   @FXML
-  private Button buttonPlay;
-  @FXML
-  private Button buttonAdd;
-  @FXML
-  private Button buttonUpdate;
+  private Button buttonSpeak;
   @FXML
   private Button buttonDelete;
+  @FXML
+  private ImageView imageSpeak;
+  @FXML
+  private ImageView imageDelete;
 
   private MediaPlayer mediaPlayer;
   private String text;
@@ -67,6 +68,9 @@ public class DictionaryController implements Initializable {
             taMeaning.setText(newValue.getDefinition());
             text = newValue.getTarget();
             buttonDelete.setDisable(false);
+            imageDelete.getStyleClass().add("image-view-button");
+            buttonSpeak.setDisable(false);
+            imageSpeak.getStyleClass().add("image-view-button");
           }
         });
     // Thiết lập sự kiện cho Text Field khi nhập một từ bất kỳ
@@ -80,21 +84,17 @@ public class DictionaryController implements Initializable {
         // Xóa hết dữ liệu trên TextArea
         taMeaning.clear();
         text = "";
-        if (text.equals("")) {
-          // Kích hoạt Button thêm
-          buttonAdd.setDisable(false);
-        } else {
-          // Kích hoạt Button thêm
-          buttonAdd.setDisable(true);
-        }
       } else {
         // Nếu từ rỗng, xóa hết dữ liệu trên ListView và TextArea
         lvWords.getItems().clear();
         taMeaning.clear();
         text = "";
-        buttonAdd.setDisable(true);
-        buttonUpdate.setDisable(true);
         buttonDelete.setDisable(true);
+        imageDelete.setOpacity(0.2);
+        imageDelete.getStyleClass().removeAll("image-view-button");
+        buttonSpeak.setDisable(true);
+        imageSpeak.setOpacity(0.2);
+        imageSpeak.getStyleClass().removeAll("image-view-button");
       }
     });
 
@@ -103,21 +103,22 @@ public class DictionaryController implements Initializable {
       // Kiểm tra nếu nghĩa không rỗng
       if (!newValue.isEmpty() && !text.equals("")) {
         buttonDelete.setDisable(false);
-        // Kiểm tra nếu nghĩa của từ được thay đổi
-        if (!newValue.equals(oldValue)) {
-          buttonUpdate.setDisable(false);
-        } else {
-          buttonUpdate.setDisable(true);
-        }
+        imageDelete.getStyleClass().add("image-view-button");
+        buttonSpeak.setDisable(false);
+        imageSpeak.getStyleClass().add("image-view-button");
       } else {
-        buttonUpdate.setDisable(true);
         buttonDelete.setDisable(true);
+        imageDelete.setOpacity(0.2);
+        imageDelete.getStyleClass().removeAll("image-view-button");
+        buttonSpeak.setDisable(true);
+        imageSpeak.setOpacity(0.2);
+        imageSpeak.getStyleClass().removeAll("image-view-button");
       }
     });
   }
 
   @FXML
-  private void handlePlay() {
+  private void handleSpeak() {
     Voice.engTextToVoice(text);
     Media media = new Media(new File(Voice.audioFilePath).toURI().toString());
     mediaPlayer = new MediaPlayer(media);

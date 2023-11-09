@@ -1,4 +1,72 @@
-.root{
--fx-background-image:url("/resources/media/image/logo.png");
--fx-background-size:cover;
+.root {
+  -hover-color-transparent: rgba(0, 120, 212, 0.05);
+  -pressed-color-transparent: rgba(0, 120, 212, 0.2);
+
+  -blue-color: #5788F2;
+  -hover-blue-color: #233ED9;
+
+  -text-color: #555c5d;
+  -hover-text-color: #2e3338;
+
+  -light-blue-color: linear-gradient(#C8D9FF, #B3D9FF);
+
+  -background-color: linear-gradient(#CEE1F5, #F0F2FC);
+}
+
+.background {
+  -fx-background-color: -background-color;
+}
+
+
+.tab {
+  -fx-background-color: transparent;
+  -fx-border-width: 0 0 5 0;
+  -fx-text-fill: #4F4E4E;
+  -fx-border-color: transparent;
+}
+.tab:hover {
+  -fx-background-color: -hover-color-transparent;
+  -fx-text-fill: #000000;
+  -fx-border-color: #B6C8DE;
+}
+.tab:pressed {
+  -fx-background-color: -pressed-color-transparent;
+  -fx-text-fill: #000000;
+  -fx-border-color: #6B93E3;
+}
+.tab.active {
+  -fx-text-fill: #000000;
+  -fx-border-color: #6B93E3;
+}
+
+
+.list-view {
+  -fx-background-color: #F5F5F5;
+}
+
+
+.search-layout {
+  -fx-background-color: white;
+  -fx-border-width: 0 0 0 0;
+  -fx-background-radius: 45;
+}
+
+
+.button-has-icon {
+  -fx-background-color: transparent;
+  -fx-background-radius: 10;
+}
+.anchor-pane:hover .button-has-icon {
+  -fx-background-color: -hover-color-transparent;
+}
+.anchor-pane:pressed .button-has-icon {
+  -fx-background-color: -pressed-color-transparent;
+}
+
+
+.image-view-button {
+  -fx-opacity: 0.6;
+}
+.anchor-pane:hover .image-view-button {
+  -fx-opacity: 1;
 }
