@@ -60,14 +60,15 @@ public class DatabaseConnection {
   }
 
   // Phương thức để truy vấn 5 dữ liệu từ điển một cách ngẫu nhiên
-  public List<Word> random() {
+  public List<Word> selectRandom() {
     // Tạo một danh sách để lưu trữ kết quả truy vấn
     List<Word> words = new ArrayList<>();
     try {
       // Tạo một đối tượng PreparedStatement để thực thi câu lệnh SQL
-      PreparedStatement ps = connection.prepareStatement("SELECT * FROM dictionary ORDER BY RAND() LIMIT ?");
+      PreparedStatement ps = connection.prepareStatement(
+          "SELECT * FROM dictionary ORDER BY RAND() LIMIT ?");
       // Thiết lập tham số cho câu lệnh SQL
-      ps.setInt(1, 5);
+      ps.setInt(1, 8);
       // Thực thi câu lệnh SQL và lấy về đối tượng ResultSet chứa kết quả truy vấn
       ResultSet rs = ps.executeQuery();
       // Duyệt qua các bản ghi trong ResultSet và thêm vào danh sách words

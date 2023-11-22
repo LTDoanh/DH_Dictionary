@@ -26,7 +26,9 @@ import javafx.stage.Stage;
 public class DictionaryController implements Initializable {
 
   @FXML
-  private Button changeParaSceneButton;
+  private Button changeTransSceneButton;
+  @FXML
+  private Button changePracSceneButton;
   @FXML
   private TextField txtKeyword;
   @FXML
@@ -228,9 +230,15 @@ public class DictionaryController implements Initializable {
     alert.showAndWait();
   }
 
-  public void handleChangeParaScene() throws Exception {
+  public void handleChangeDicScene() throws Exception {
     Parent root = FXMLLoader.load(getClass().getResource("fxml/translate.fxml"));
-    Stage window = (Stage) changeParaSceneButton.getScene().getWindow();
+    Stage window = (Stage) changeTransSceneButton.getScene().getWindow();
+    window.setScene(new Scene(root));
+  }
+
+  public void handleChangePracScene() throws Exception {
+    Parent root = FXMLLoader.load(getClass().getResource("fxml/practice.fxml"));
+    Stage window = (Stage) changePracSceneButton.getScene().getWindow();
     window.setScene(new Scene(root));
   }
 }

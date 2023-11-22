@@ -30,7 +30,9 @@ public class TranslateController implements Initializable {
   private MediaPlayer mediaPlayer;
 
   @FXML
-  private Button changeWordSceneButton;
+  private Button changeDicSceneButton;
+  @FXML
+  private Button changePracSceneButton;
 
   @FXML
   private TextArea area1 = new TextArea();
@@ -168,10 +170,15 @@ public class TranslateController implements Initializable {
     });
   }
 
-  public void handleChangeWordScene() throws Exception {
+  public void handleChangeDicScene() throws Exception {
     Parent root = FXMLLoader.load(getClass().getResource("fxml/dictionary.fxml"));
-    Stage window = (Stage) changeWordSceneButton.getScene().getWindow();
+    Stage window = (Stage) changeDicSceneButton.getScene().getWindow();
     window.setScene(new Scene(root));
   }
 
+  public void handleChangePracScene() throws Exception {
+    Parent root = FXMLLoader.load(getClass().getResource("fxml/practice.fxml"));
+    Stage window = (Stage) changePracSceneButton.getScene().getWindow();
+    window.setScene(new Scene(root));
+  }
 }

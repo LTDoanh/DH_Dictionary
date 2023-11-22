@@ -2,6 +2,7 @@ package dictionary;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -17,9 +18,13 @@ public class Main extends Application {
   @Override
   public void start(Stage stage) throws IOException {
     try {
-      Parent root = FXMLLoader.load(this.getClass().getResource("fxml/dictionary.fxml"));
-      Scene translateWord = new Scene(root);
-      stage.setScene(translateWord);
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/flashcard.fxml"));
+      Parent root = loader.load();
+      FlashcardController controller = loader.getController();
+      controller.setFileName("C:\\Users\\DELL\\Downloads\\demo2\\src\\main\\resources\\dictionary\\data\\flashcard1.txt");
+      Scene scene = new Scene(root);
+      scene.setCamera(new PerspectiveCamera());
+      stage.setScene(scene);
       stage.getIcons().add(new Image(getClass().getResource("media/image/logo.png").toExternalForm()));
       stage.setTitle("DH Dictionary");
       stage.show();
