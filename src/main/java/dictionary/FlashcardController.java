@@ -64,7 +64,7 @@ public class FlashcardController {
   }
 
   @FXML
-  public void initialize() {
+  public void init() {
     readDataFromFile(fileName);
     if (!words.isEmpty()) {
       Word word = words.get(index);
@@ -271,7 +271,7 @@ public class FlashcardController {
   }
 
   public void handleBackButton() throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("fxml/challenge.fxml"));
+    Parent root = FXMLLoader.load(getClass().getResource("fxml/practice.fxml"));
     Stage window = (Stage) changePracSceneButton.getScene().getWindow();
     window.setScene(new Scene(root));
   }

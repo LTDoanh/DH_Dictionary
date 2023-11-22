@@ -5,10 +5,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
@@ -21,6 +23,9 @@ public class PracticeController {
   private Button changeDicSceneButton;
   @FXML
   private Button changeTransSceneButton;
+
+  @FXML
+  Button flashcard;
 
   @FXML
   private GridPane grid;
@@ -88,12 +93,10 @@ public class PracticeController {
     grid.add(button, col, row);
     button.setStyle("css/practice.css");
     button.getStyleClass().add("flash-card");
-    // Tăng biến đếm lên 1
-    count++;
     // Tạo đường dẫn cho button mới
     String link = "flashcard" + (count + 1) + ".txt";
     // Đặt sự kiện cho button
-    button.setOnAction(e -> handleChoiceFlashcard(event, link));
+    button.setOnAction(e -> handleChoiceFlashcard(e, link));
     // Ghi thông tin của button mới vào file text
     try (FileWriter fw = new FileWriter(fileName, true)) {
       // Tạo dòng chứa số lượng, tên và đường dẫn của button mới
@@ -104,10 +107,11 @@ public class PracticeController {
       // Xử lý ngoại lệ
       e.printStackTrace();
     }
+    count++;
   }
 
   // Phương thức xử lý sự kiện khi chọn button bất kỳ trong lưới
-  private void handleChoiceFlashcard(ActionEvent event, String link) {
+  private void handleChoiceFlashcard(Event event, String link) {
     String fullLink =
         "C:\\Users\\DELL\\Downloads\\demo2\\src\\main\\resources\\dictionary\\data\\" + link;
     // Đọc dữ liệu từ file link và in ra text area
@@ -116,9 +120,12 @@ public class PracticeController {
       Parent root = loader.load();
       FlashcardController controller = loader.getController();
       controller.setFileName(fullLink);
+      controller.init();
       Node node = (Node) event.getSource();
       Stage window = (Stage) node.getScene().getWindow();
-      window.setScene(new Scene(root));
+      Scene scene = new Scene(root);
+      scene.setCamera(new PerspectiveCamera());
+      window.setScene(scene);
     } catch (IOException e) {
       // Tạo file mới ở vị trí theo đường dẫn link
       try (FileWriter fw = new FileWriter(fullLink)) {
@@ -128,9 +135,12 @@ public class PracticeController {
         Parent root = loader.load();
         FlashcardController controller = loader.getController();
         controller.setFileName(fullLink);
+        controller.init();
         Node node = (Node) event.getSource();
         Stage window = (Stage) node.getScene().getWindow();
-        window.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.setCamera(new PerspectiveCamera());
+        window.setScene(scene);
       } catch (IOException e1) {
         // Xử lý ngoại lệ
         e1.printStackTrace();

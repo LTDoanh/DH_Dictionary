@@ -18,8 +18,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-//import java.awt.SystemColor.text;
-
 public class TranslateController implements Initializable {
 
   private String languageFrom = "";
@@ -35,7 +33,6 @@ public class TranslateController implements Initializable {
   private Button changeDicSceneButton;
   @FXML
   private Button changePracSceneButton;
-
 
   @FXML
   private TextArea area1 = new TextArea();
@@ -139,15 +136,12 @@ public class TranslateController implements Initializable {
     }
   }
 
-
   @FXML
   private void handlePlay() {
-    /*
-    Voice.engTextToVoice(text);
+    Voice.engTextToVoice(area1.getText());
     Media media = new Media(new File(Voice.audioFilePath).toURI().toString());
     mediaPlayer = new MediaPlayer(media);
     mediaPlayer.play();
-     */
   }
 
   @Override

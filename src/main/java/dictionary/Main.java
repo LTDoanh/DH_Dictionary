@@ -18,10 +18,8 @@ public class Main extends Application {
   @Override
   public void start(Stage stage) throws IOException {
     try {
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/flashcard.fxml"));
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/practice.fxml"));
       Parent root = loader.load();
-      FlashcardController controller = loader.getController();
-      controller.setFileName("C:\\Users\\DELL\\Downloads\\demo2\\src\\main\\resources\\dictionary\\data\\flashcard1.txt");
       Scene scene = new Scene(root);
       scene.setCamera(new PerspectiveCamera());
       stage.setScene(scene);
