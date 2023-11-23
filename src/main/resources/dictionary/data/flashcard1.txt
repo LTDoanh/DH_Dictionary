@@ -1,2 +1,1 @@
-hello:chào
-hello:xin chào
+Hello:xin chào

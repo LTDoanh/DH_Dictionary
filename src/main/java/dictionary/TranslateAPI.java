@@ -7,15 +7,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class TranslateAPI {
+public class TranslateAPI extends API{
 
-  public static String translate(String langFrom, String langTo, String text) throws IOException {
+  @Override
+  public String useAPI(String text) throws IOException {
     String urlStr =
         "https://script.google.com/macros/s/AKfycbxl1laF3m9YjV0mQ5cfUkSKouKg6uHQ80ezLFt4TrYlrDSDsBaj-_3XfX5ytyvdfBvC/exec"
             +
             "?q=" + URLEncoder.encode(text, "UTF-8") +
-            "&target=" + langTo +
-            "&source=" + langFrom;
+            "&target=" + "vi" +
+            "&source=" + "en";
     URL url = new URL(urlStr);
     StringBuilder response = new StringBuilder();
     HttpURLConnection con = (HttpURLConnection) url.openConnection();

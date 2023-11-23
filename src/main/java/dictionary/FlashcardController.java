@@ -1,11 +1,5 @@
 package dictionary;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.animation.Interpolator;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PauseTransition;
@@ -17,21 +11,24 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class FlashcardController {
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
-  @FXML
-  private Button changeDicSceneButton;
-  @FXML
-  private Button changeTransSceneButton;
-  @FXML
-  private Button changePracSceneButton;
+public class FlashcardController extends AppController {
+
 
   @FXML
   private Button deleteButton;
@@ -51,6 +48,9 @@ public class FlashcardController {
   private boolean isHorizontal;
   private String fileName;
   private int index;
+
+  @FXML
+  private Button changePracSceneButton;
 
   public FlashcardController() {
     words = new ArrayList<>();
@@ -276,21 +276,8 @@ public class FlashcardController {
     window.setScene(new Scene(root));
   }
 
-  public void handleChangeDicScene() throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("fxml/dictionary.fxml"));
-    Stage window = (Stage) changeDicSceneButton.getScene().getWindow();
-    window.setScene(new Scene(root));
-  }
+  @Override
+  public void initialize(URL url, ResourceBundle resourceBundle) {
 
-  public void handleChangeTransScene() throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("fxml/translate.fxml"));
-    Stage window = (Stage) changeTransSceneButton.getScene().getWindow();
-    window.setScene(new Scene(root));
-  }
-
-  public void handleChangePracScene() throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("fxml/practice.fxml"));
-    Stage window = (Stage) changePracSceneButton.getScene().getWindow();
-    window.setScene(new Scene(root));
   }
 }

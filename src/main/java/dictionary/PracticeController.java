@@ -1,9 +1,5 @@
 package dictionary;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -17,12 +13,14 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-public class PracticeController {
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-  @FXML
-  private Button changeDicSceneButton;
-  @FXML
-  private Button changeTransSceneButton;
+public class PracticeController extends AppController {
 
   @FXML
   Button flashcard;
@@ -30,11 +28,11 @@ public class PracticeController {
   @FXML
   private GridPane grid;
 
-  private final String fileName = "C:\\Users\\DELL\\Downloads\\demo2\\src\\main\\resources\\dictionary\\data\\flashcards.txt";
+  private final String fileName = "C:\\Users\\HUY\\Downloads\\demo2 (1) (2)\\src\\main\\resources\\dictionary\\data\\flashcards.txt";
 
   private int count = 0; // Biến đếm số button
 
-  public void initialize() {
+  public void initialize(URL url, ResourceBundle resourceBundle) {
     // Đọc file text chứa thông tin các button đã được tạo sẵn
     try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
       // Đọc từng dòng trong file
@@ -113,7 +111,7 @@ public class PracticeController {
   // Phương thức xử lý sự kiện khi chọn button bất kỳ trong lưới
   private void handleChoiceFlashcard(Event event, String link) {
     String fullLink =
-        "C:\\Users\\DELL\\Downloads\\demo2\\src\\main\\resources\\dictionary\\data\\" + link;
+        "C:\\Users\\HUY\\Downloads\\demo2 (1) (2)\\src\\main\\resources\\dictionary\\data\\" + link;
     // Đọc dữ liệu từ file link và in ra text area
     try (BufferedReader br = new BufferedReader(new FileReader(fullLink))) {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/flashcard.fxml"));
@@ -146,18 +144,5 @@ public class PracticeController {
         e1.printStackTrace();
       }
     }
-  }
-
-
-  public void handleChangeDicScene() throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("fxml/dictionary.fxml"));
-    Stage window = (Stage) changeDicSceneButton.getScene().getWindow();
-    window.setScene(new Scene(root));
-  }
-
-  public void handleChangeTransScene() throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("fxml/translate.fxml"));
-    Stage window = (Stage) changeTransSceneButton.getScene().getWindow();
-    window.setScene(new Scene(root));
   }
 }

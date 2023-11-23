@@ -1,44 +1,33 @@
 package dictionary;
 
-import java.io.File;
-import java.net.URL;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.stage.Stage;
 
-public class DictionaryController implements Initializable {
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
-  @FXML
-  private Button changeTransSceneButton;
-  @FXML
-  private Button changePracSceneButton;
+public class DictionaryController extends AppController {
+
   @FXML
   private TextField txtKeyword;
   @FXML
   private ListView<Word> lvWords;
   @FXML
-  private ComboBox<String> cbLanguage;
-  @FXML
   private TextArea taMeaning;
   @FXML
   private Button buttonSpeak;
+  @FXML
+  private Button buttonAdd;
+  @FXML
+  private Button buttonUpdate;
   @FXML
   private Button buttonDelete;
   @FXML
@@ -46,28 +35,21 @@ public class DictionaryController implements Initializable {
   @FXML
   private ImageView imageDelete;
 
+  private List<Word> history = new ArrayList<>();
+
   private MediaPlayer mediaPlayer;
   private String text;
 
-  private DatabaseConnection connect;
-
-  public DictionaryController() {
-    connect = new DatabaseConnection();
-    connect.getConnection();
-  }
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    // Thiết lập các giá trị cho ComboBox chọn ngôn ngữ
-    cbLanguage.getItems().addAll("Eng - Vie", "Vie - Eng");
-    cbLanguage.getSelectionModel().select(0);
-
     // Thiết lập sự kiện cho ListView khi chọn một từ trong danh sách kết quả
     lvWords.getSelectionModel().selectedItemProperty()
         .addListener((observableValue, oldValue, newValue) -> {
           // Nếu có từ được chọn, hiển thị nghĩa của từ đó lên TextArea và Text Field
           if (newValue != null) {
             taMeaning.setText(newValue.getDefinition());
+            history.add(new Word("FIND", newValue));
             text = newValue.getTarget();
             buttonDelete.setDisable(false);
             imageDelete.getStyleClass().add("image-view-button");
@@ -80,7 +62,7 @@ public class DictionaryController implements Initializable {
       // Kiểm tra nếu từ không rỗng
       if (!newValue.isEmpty()) {
         // Truy vấn dữ liệu từ điển theo từ và lấy về danh sách kết quả
-        List<Word> words = connect.select(newValue);
+        List<Word> words = DatabaseConnection.select(newValue);
         // Hiển thị danh sách kết quả lên ListView
         lvWords.getItems().setAll(words);
         // Xóa hết dữ liệu trên TextArea
@@ -121,8 +103,9 @@ public class DictionaryController implements Initializable {
 
   @FXML
   private void handleSpeak() {
-    Voice.engTextToVoice(text);
-    Media media = new Media(new File(Voice.audioFilePath).toURI().toString());
+    VoiceAPI v = new VoiceAPI();
+    v.useAPI(text);
+    Media media = new Media(new File(VoiceAPI.audioFilePath).toURI().toString());
     mediaPlayer = new MediaPlayer(media);
     mediaPlayer.play();
   }
@@ -138,18 +121,13 @@ public class DictionaryController implements Initializable {
       String meaning = taMeaning.getText();
       // Kiểm tra nếu cả hai giá trị không rỗng
       if (!word.isEmpty() && !meaning.isEmpty()) {
-        // Tạo một đối tượng Word từ hai giá trị này
         Word w = new Word(word, meaning);
-        // Thêm đối tượng Word vào file SQL và lấy về kết quả thành công hay thất bại
-        boolean result = connect.insert(w);
+        DatabaseConnection.add(w);
+        history.add(new Word("ADD", w));
         // Hiển thị thông báo kết quả cho người dùng
-        if (result) {
-          showAlert(Alert.AlertType.INFORMATION, "Add the word success!");
-          // Cập nhật lại danh sách kết quả trên ListView
-          lvWords.getItems().add(w);
-        } else {
-          showAlert(Alert.AlertType.ERROR, "Add the word failure!");
-        }
+        showAlert(AlertType.INFORMATION, "Add the word success!");
+        // Cập nhật lại danh sách kết quả trên ListView
+        lvWords.getItems().add(w);
       }
     }
   }
@@ -171,15 +149,12 @@ public class DictionaryController implements Initializable {
         w.setTarget(word);
         w.setDefinition(meaning);
         // Cập nhật đối tượng Word trong file SQL và lấy về kết quả thành công hay thất bại
-        boolean result = connect.update(w);
+        DatabaseConnection.update(w);
+        history.add(new Word("UPDATE", w));
         // Hiển thị thông báo kết quả cho người dùng
-        if (result) {
-          showAlert(AlertType.INFORMATION, "Update the word success!");
-          // Cập nhật lại danh sách kết quả trên ListView
-          lvWords.refresh();
-        } else {
-          showAlert(AlertType.ERROR, "Update the word failure!");
-        }
+        showAlert(AlertType.INFORMATION, "Update the word success!");
+        // Cập nhật lại danh sách kết quả trên ListView
+        lvWords.refresh();
       }
     }
   }
@@ -195,15 +170,12 @@ public class DictionaryController implements Initializable {
       // Kiểm tra nếu có đối tượng Word được chọn
       if (w != null) {
         // Xóa đối tượng Word trong file SQL và lấy về kết quả thành công hay thất bại
-        boolean result = connect.delete(w);
+        DatabaseConnection.delete(w);
+        history.add(new Word("DELETE", w));
         // Hiển thị thông báo kết quả cho người dùng
-        if (result) {
-          showAlert(AlertType.INFORMATION, "Delete the word success!");
-          // Cập nhật lại danh sách kết quả trên ListView
-          lvWords.getItems().remove(w);
-        } else {
-          showAlert(AlertType.ERROR, "Delete the word failure!");
-        }
+        showAlert(AlertType.INFORMATION, "Delete the word success!");
+        // Cập nhật lại danh sách kết quả trên ListView
+        lvWords.getItems().remove(w);
       }
     }
   }
@@ -211,7 +183,7 @@ public class DictionaryController implements Initializable {
   // Phương thức để hiển thị hộp thoại xác nhận cho người dùng
   private boolean showAlertConfirm(String message) {
     // Tạo một đối tượng Alert với loại và nội dung được truyền vào
-    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message);
+    Alert alert = new Alert(AlertType.CONFIRMATION, message);
     // Thiết lập tiêu đề và nút cho hộp thoại
     alert.setTitle("Confirmation");
     alert.setHeaderText(null);
@@ -222,23 +194,27 @@ public class DictionaryController implements Initializable {
     return result.orElse(ButtonType.NO) == ButtonType.YES;
   }
 
+  public void showHistory() {
+    Alert alert = new Alert(AlertType.INFORMATION);
+    alert.setTitle("History");
+    String s = "";
+    int j = 1;
+    for (int i = history.size() - 1; i >= 0; i --) {
+      s = s + j + ". " + history.get(i).getType() + " Word: " + history.get(i).getTarget() + "\n";
+      j ++;
+      if (j >= 15) {
+        break;
+      }
+    }
+    alert.setHeaderText(s);
+    alert.setContentText("Đây là lịch sử hoạt động sử dụng gần đây của bạn.");
+    alert.showAndWait();
+  }
   // Phương thức để hiển thị thông báo cho người dùng
-  private void showAlert(Alert.AlertType type, String message) {
+  private void showAlert(AlertType type, String message) {
     // Tạo một đối tượng Alert với loại và nội dung được truyền vào
     Alert alert = new Alert(type, message);
     // Hiển thị đối tượng Alert lên màn hình
     alert.showAndWait();
-  }
-
-  public void handleChangeDicScene() throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("fxml/translate.fxml"));
-    Stage window = (Stage) changeTransSceneButton.getScene().getWindow();
-    window.setScene(new Scene(root));
-  }
-
-  public void handleChangePracScene() throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("fxml/practice.fxml"));
-    Stage window = (Stage) changePracSceneButton.getScene().getWindow();
-    window.setScene(new Scene(root));
   }
 }

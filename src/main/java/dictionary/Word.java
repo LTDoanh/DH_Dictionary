@@ -6,9 +6,14 @@ import org.jsoup.nodes.Element;
 
 public class Word {
 
+  private String type;
   private int id; // Mã số của từ
   private String target; // Từ tiếng Anh hoặc tiếng Việt
   private String definition; // Nghĩa của từ
+
+  public String getType() {
+    return type;
+  }
 
   public Word() {
   }
@@ -22,6 +27,12 @@ public class Word {
     this.id = id;
     this.target = target;
     this.definition = definition;
+  }
+
+  public Word(String type, Word word) {
+    this.target = word.target;
+    this.definition = word.definition;
+    this.type = type;
   }
 
   private String HTMLtoString(String HTMLstr) {

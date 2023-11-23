@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" styleClass="background" stylesheets="@../css/game.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dictionary.WordSearchController">
+  <children>
+      <HBox prefHeight="50.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane styleClass="anchor-pane">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
+               <children>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="image-view-button">
+                     <image>
+                        <Image url="@../media/image/back.png" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackScene" prefHeight="40.0" prefWidth="40.0" styleClass="button-has-icon" />
+               </children>
+            </AnchorPane>
+         </children>
+      </HBox>
+    <GridPane fx:id="gridPane" layoutX="50.0" layoutY="100.0" prefHeight="90.0" prefWidth="396.0" style="-fx-background-color: rgba(154, 182, 213, 0.4); -fx-background-radius: 10; -fx-border-color: rgba(165, 170, 175, 0.6); -fx-border-radius: 10;">
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding></GridPane>
+      <AnchorPane layoutX="500.0" layoutY="100.0" prefHeight="380.0" prefWidth="260.0" style="-fx-background-color: rgba(154, 182, 213, 0.4); -fx-background-radius: 30; -fx-border-color: rgba(165, 170, 175, 0.6); -fx-border-radius: 30;">
+         <children>
+          <Label fx:id="showPoint" layoutX="41.0" layoutY="17.0" prefHeight="30.0" prefWidth="100.0" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="10.0">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+          <TextArea fx:id="showHint" prefHeight="250.0" prefWidth="250.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0" />
+            <AnchorPane layoutX="93.0" layoutY="9.0" prefHeight="30.0" prefWidth="30.0" styleClass="anchor-pane" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="image-view-button">
+                     <image>
+                        <Image url="@../media/image/restart.png" />
+                     </image>
+                  </ImageView>
+                <Button fx:id="restart" mnemonicParsing="false" onAction="#restart" prefHeight="30.0" prefWidth="30.0" styleClass="button-has-icon" />
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="14.0" layoutY="325.0" styleClass="anchor-pane" AnchorPane.leftAnchor="15.0">
+               <children>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="image-view-button" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+                     <image>
+                        <Image url="@../media/image/prev.png" />
+                     </image>
+                  </ImageView>
+                <Button fx:id="prev" mnemonicParsing="false" onAction="#goPrev" prefHeight="40.0" prefWidth="40.0" styleClass="button-has-icon" AnchorPane.leftAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="194.0" layoutY="325.0" styleClass="anchor-pane" AnchorPane.rightAnchor="15.0">
+               <children>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="image-view-button" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                     <image>
+                        <Image url="@../media/image/next.png" />
+                     </image>
+                  </ImageView>
+                <Button fx:id="next" mnemonicParsing="false" onAction="#goNext" prefHeight="40.0" prefWidth="40.0" styleClass="button-has-icon" />
+               </children>
+            </AnchorPane>
+          <Label fx:id="showWord" layoutX="80.0" layoutY="325.0" prefHeight="40.0" prefWidth="100.0" text="Word:" textAlignment="CENTER" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.80000000000001">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+  </children>
+</AnchorPane>

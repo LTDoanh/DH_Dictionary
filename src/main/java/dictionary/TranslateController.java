@@ -1,24 +1,20 @@
 package dictionary;
 
-import java.io.File;
-import java.net.URL;
-import java.util.Objects;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
-public class TranslateController implements Initializable {
+public class TranslateController extends AppController {
 
   private String languageFrom = "";
   private String languageTo = "vi";
@@ -28,11 +24,6 @@ public class TranslateController implements Initializable {
   private String speakTo;
 
   private MediaPlayer mediaPlayer;
-
-  @FXML
-  private Button changeDicSceneButton;
-  @FXML
-  private Button changePracSceneButton;
 
   @FXML
   private TextArea area1 = new TextArea();
@@ -111,7 +102,8 @@ public class TranslateController implements Initializable {
     nameTo = "Chi";
     speakTo = "vi-vn";
     if (!Objects.equals(area1.getText(), "")) {
-      area2.setText(TranslateAPI.translate(languageFrom, languageTo, area1.getText()));
+      TranslateAPI t = new TranslateAPI();
+      area2.setText(t.useAPI(area1.getText()));
     }
   }
 
@@ -124,22 +116,35 @@ public class TranslateController implements Initializable {
     nameTo = "Linda";
     speakTo = "en-gb";
     if (!Objects.equals(area1.getText(), "")) {
-      area2.setText(TranslateAPI.translate(languageFrom, languageTo, area1.getText()));
+      TranslateAPI t = new TranslateAPI();
+      area2.setText(t.useAPI(area1.getText()));
     }
   }
 
   @FXML
   private void handleTranslate() throws IOException {
     if (!Objects.equals(area1.getText(), "")) {
-      translateButton.setDisable(false);
-      area2.setText(TranslateAPI.translate(languageFrom, languageTo, area1.getText()));
+      if (area1.getText().length() <= 2000) {
+        translateButton.setDisable(false);
+        TranslateAPI t = new TranslateAPI();
+        area2.setText(t.useAPI(area1.getText()));
+      } else {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Imformation");
+        alert.setHeaderText("Đoạn văn cần dịch quá dài");
+        alert.setContentText("Hãy rút ngắn lại");
+        area1.setText("");
+        alert.showAndWait();
+      }
+
     }
   }
 
   @FXML
   private void handlePlay() {
-    Voice.engTextToVoice(area1.getText());
-    Media media = new Media(new File(Voice.audioFilePath).toURI().toString());
+    VoiceAPI v = new VoiceAPI();
+    v.useAPI(area1.getText());
+    Media media = new Media(new File(VoiceAPI.audioFilePath).toURI().toString());
     mediaPlayer = new MediaPlayer(media);
     mediaPlayer.play();
   }
@@ -168,17 +173,5 @@ public class TranslateController implements Initializable {
         translateButton.setDisable(true);
       }
     });
-  }
-
-  public void handleChangeDicScene() throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("fxml/dictionary.fxml"));
-    Stage window = (Stage) changeDicSceneButton.getScene().getWindow();
-    window.setScene(new Scene(root));
-  }
-
-  public void handleChangePracScene() throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("fxml/practice.fxml"));
-    Stage window = (Stage) changePracSceneButton.getScene().getWindow();
-    window.setScene(new Scene(root));
   }
 }

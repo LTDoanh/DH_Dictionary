@@ -2,23 +2,23 @@ package dictionary;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
-import javafx.stage.WindowEvent;
 
 public class Main extends Application {
 
   @Override
   public void start(Stage stage) throws IOException {
     try {
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/practice.fxml"));
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/dictionary.fxml"));
       Parent root = loader.load();
       Scene scene = new Scene(root);
       scene.setCamera(new PerspectiveCamera());

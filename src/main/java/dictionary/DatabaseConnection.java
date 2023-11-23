@@ -1,148 +1,64 @@
 package dictionary;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class DatabaseConnection {
+    public static  TreeMap<String, String> treeMap = new TreeMap<>();
 
-  // Đối tượng Connection để kết nối với cơ sở dữ liệu
-  public Connection connection;
-
-  // Phương thức khởi tạo để khởi tạo đối tượng Connection
-  public Connection getConnection() {
-    String databaseName = "example";
-    String username = "root";
-    String password = "doanh2004";
-    String url = "jdbc:mysql://localhost/" + databaseName;
-    try {
-      Class.forName("com.mysql.cj.jdbc.Driver");
-      // Tạo đối tượng Connection bằng cách sử dụng URL, username và password của cơ sở dữ liệu
-      connection = DriverManager.getConnection(url, username, password);
-    } catch (Exception e) {
-      e.printStackTrace();
+    static {
+        String fileName = "src/main/resources/dictionary/dataFromSql.txt"; // Tên file cần đọc
+        try {
+            String str = Files.readString(Paths.get(fileName));
+            String[] strs = str.split("\\|");
+            //System.out.println(strs.length / 2);
+            for (int i = 0; i < strs.length / 2; i ++) {
+                treeMap.put(strs[2*i], strs[2*i + 1]);
+            }
+            System.out.println(treeMap.size());
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
-    return connection;
-  }
 
-  // Phương thức để truy vấn dữ liệu từ điển theo từ khóa
-  public List<Word> select(String keyword) {
-    // Tạo một danh sách để lưu trữ kết quả truy vấn
-    List<Word> words = new ArrayList<>();
-    try {
-      // Tạo một đối tượng PreparedStatement để thực thi câu lệnh SQL
-      PreparedStatement ps = connection.prepareStatement(
-          "SELECT * FROM dictionary WHERE target LIKE ?");
-      // Thiết lập tham số cho câu lệnh SQL
-      ps.setString(1, keyword + "%");
-      // Thực thi câu lệnh SQL và lấy về đối tượng ResultSet chứa kết quả truy vấn
-      ResultSet rs = ps.executeQuery();
-      // Duyệt qua các bản ghi trong ResultSet và thêm vào danh sách words
-      while (rs.next()) {
-        // Lấy giá trị của các cột trong bản ghi hiện tại
-        int id = rs.getInt("id");
-        String target = rs.getString("target");
-        String definition = rs.getString("definition");
-        // Tạo một đối tượng Word từ các giá trị này
-        Word w = new Word(id, target, definition);
-        // Thêm đối tượng Word vào danh sách words
-        words.add(w);
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
+    public static List<Word> select(String newvalue) {
+        List<Word> list = new ArrayList<>();
+        for (Map.Entry<String, String> entry : treeMap.entrySet()) {
+            if (entry.getKey().startsWith(newvalue)) {
+                Word word = new Word(entry.getKey(), entry.getValue());
+                list.add(word);
+            }
+        }
+        return list;
     }
-    // Trả về danh sách words
-    return words;
-  }
-
-  // Phương thức để truy vấn 5 dữ liệu từ điển một cách ngẫu nhiên
-  public List<Word> selectRandom() {
-    // Tạo một danh sách để lưu trữ kết quả truy vấn
-    List<Word> words = new ArrayList<>();
-    try {
-      // Tạo một đối tượng PreparedStatement để thực thi câu lệnh SQL
-      PreparedStatement ps = connection.prepareStatement(
-          "SELECT * FROM dictionary ORDER BY RAND() LIMIT ?");
-      // Thiết lập tham số cho câu lệnh SQL
-      ps.setInt(1, 8);
-      // Thực thi câu lệnh SQL và lấy về đối tượng ResultSet chứa kết quả truy vấn
-      ResultSet rs = ps.executeQuery();
-      // Duyệt qua các bản ghi trong ResultSet và thêm vào danh sách words
-      while (rs.next()) {
-        // Lấy giá trị của các cột trong bản ghi hiện tại
-        int id = rs.getInt("id");
-        String target = rs.getString("target");
-        String definition = rs.getString("definition");
-        // Tạo một đối tượng Word từ các giá trị này
-        Word w = new Word(id, target, definition);
-        // Thêm đối tượng Word vào danh sách words
-        words.add(w);
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
+    // Phương thức để truy vấn 5 dữ liệu từ điển một cách ngẫu nhiên
+    public static List<Word> selectRandom() {
+        List<Word> result = new ArrayList<>();
+        List<Map.Entry<String, String>> entries = new ArrayList<>(treeMap.entrySet());
+        Collections.shuffle(entries);
+        List<Map.Entry<String, String>> randomEntries = entries.subList(0, 8);
+        for (Map.Entry<String, String> entry : randomEntries) {
+            result.add(new Word(result.size() + 1, entry.getKey(),entry.getValue()));
+        }
+        return result;
     }
-    // Trả về danh sách words
-    return words;
-  }
 
 
-  // Phương thức để thêm dữ liệu từ điển vào file SQL
-  public boolean insert(Word word) {
-    try {
-      // Tạo một đối tượng PreparedStatement để thực thi câu lệnh SQL
-      PreparedStatement ps = connection.prepareStatement(
-          "INSERT INTO dictionary(target, definition) VALUES(?, ?)");
-      // Thiết lập tham số cho câu lệnh SQL
-      ps.setString(1, word.getTarget());
-      ps.setString(2, word.getDefinition());
-      // Thực thi câu lệnh SQL và trả về số bản ghi bị ảnh hưởng
-      int result = ps.executeUpdate();
-      // Nếu số bản ghi bị ảnh hưởng là 1, trả về true, ngược lại trả về false
-      return result == 1;
-    } catch (SQLException e) {
-      e.printStackTrace();
+    // Phương thức để thêm dữ liệu từ điển vào file SQL
+    public static void add(Word word) {
+        treeMap.put(word.getTarget(), word.getDefinition());
     }
-    return false;
-  }
 
-  // Phương thức để cập nhật dữ liệu từ điển trong file SQL
-  public boolean update(Word word) {
-    try {
-      // Tạo một đối tượng PreparedStatement để thực thi câu lệnh SQL
-      PreparedStatement ps = connection.prepareStatement(
-          "UPDATE dictionary SET target = ?, definition = ? WHERE id = ?");
-      // Thiết lập tham số cho câu lệnh SQL
-      ps.setString(1, word.getTarget());
-      ps.setString(2, word.getDefinition());
-      ps.setInt(3, word.getId());
-      // Thực thi câu lệnh SQL và trả về số bản ghi bị ảnh hưởng
-      int result = ps.executeUpdate();
-      // Nếu số bản ghi bị ảnh hưởng là 1, trả về true, ngược lại trả về false
-      return result == 1;
-    } catch (SQLException e) {
-      e.printStackTrace();
+    // Phương thức để cập nhật dữ liệu từ điển trong file SQL
+    public static void update(Word word) {
+        treeMap.remove(word.getTarget());
+        treeMap.put(word.getTarget(), word.getDefinition());
     }
-    return false;
-  }
 
-  // Phương thức để xóa dữ liệu từ điển trong file SQL
-  public boolean delete(Word word) {
-    try {
-      // Tạo một đối tượng PreparedStatement để thực thi câu lệnh SQL
-      PreparedStatement ps = connection.prepareStatement("DELETE FROM dictionary WHERE id = ?");
-      // Thiết lập tham số cho câu lệnh SQL
-      ps.setInt(1, word.getId());
-      // Thực thi câu lệnh SQL và trả về số bản ghi bị ảnh hưởng
-      int result = ps.executeUpdate();
-      // Nếu số bản ghi bị ảnh hưởng là 1, trả về true, ngược lại trả về false
-      return result == 1;
-    } catch (SQLException e) {
-      e.printStackTrace();
+    // Phương thức để xóa dữ liệu từ điển trong file SQL
+    public static void delete(Word word) {
+        treeMap.remove(word.getTarget());
     }
-    return false;
-  }
 }
